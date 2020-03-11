@@ -1,0 +1,57 @@
+{% extends 'todo/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <form class = 'form' action = "{% url 'todo:new_item' %}" method = 'post'> 
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% comment %} {% buttons %}
+            <button class = 'btn btn-primary' name = 'submit'>Add Item</button>
+        {% endbuttons %} {% endcomment %}
+    </form>
+    <h3>Inbox</h3>
+    {% comment %} <ul>
+        {% for item in items %}
+        
+    </ul> {% endcomment %}
+<!-- Table  -->
+<table class="table table-hover">
+  <!-- Table head -->
+  <thead>
+    <tr>
+      <th>
+        <!-- Default unchecked -->
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="tableDefaultCheck1">
+          <label class="custom-control-label" for="tableDefaultCheck1"></label>
+        </div>
+      </th>
+      <th>待办</th>
+    </tr>
+  </thead>
+  <!-- Table head -->
+
+  <!-- Table body -->
+  <tbody>
+    {% for item in today %}
+    <tr>
+        <th scope="row" style="width: 6.66%">
+        <!-- Default unchecked -->
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="tableDefaultCheck2" checked>
+                <label class="custom-control-label" for="tableDefaultCheck2"></label>
+            </div>
+        </th>
+        <td>{{ item.start_date }}</td>
+        <td>{{ item.desc }}</td>
+    </tr>
+    {% empty %}
+        <tr>
+            <td>No data</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+  <!-- Table body -->
+</table>
+<!-- Table  -->
+{% endblock content %}
