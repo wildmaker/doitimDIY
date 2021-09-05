@@ -18,6 +18,10 @@ def index(request):
     return render(request, 'todo/index.html')
 
 @login_required
+def home(request):
+    return render(request, 'todo/home.html')
+
+@login_required
 def items(request):
     items = Item.objects.order_by('-date_added')
     form = ItemForm()
@@ -32,7 +36,7 @@ def items(request):
 def new_item(request):
     """添加新事务"""
     if request.method != 'POST':
-        # 未提交数据:创建一个新表单d
+        # 未提交数据:创建一个新表单
         form = ItemForm()
     else:
         # 创建新的事务
@@ -42,10 +46,9 @@ def new_item(request):
             new_item.owner = request.user
             new_item.start_date = None
             new_item.save()
-        return HttpResponseRedirect(reverse('todo:items'))
+        # return HttpResponseRedirect(reverse('todo:items'))
     context = {'form':form}
-    print('asdfasdf')
-    return render(request,'todo/items', context)
+    return render(request,'todo/new_item.html', context)
         # desc = json.loads(request.body).get('desc')
         # Item.objects.create(desc = desc, owner = request.user)
         # form = ItemForm(request.POST)

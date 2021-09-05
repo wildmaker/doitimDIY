@@ -1,0 +1,10 @@
+{% extends "todo/base.html" %}
+{% block content %}
+  <div class="row">
+    {% include 'todo/sidebar.html' %}
+    {% include 'todo/list.html' %}
+  </div>
+  <script>
+    {% include 'todo/nav.js' %}
+  </script>
+{% endblock content %}

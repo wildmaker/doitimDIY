@@ -16,7 +16,7 @@ def userlogin(request):
         if user is not None:
             login(request, user)
             # redirect
-            return HttpResponseRedirect(reverse("todo:index"))
+            return HttpResponseRedirect(reverse("todo:home"))
         else:
             # return an error message
             context = {"error_message":"Could not log in, please check your accout."}
@@ -36,6 +36,7 @@ from django.contrib.auth.forms import UserCreationForm
 def register(request):
     """ 注册新用户 """
     if request.method != 'POST':
+        # print('hello')
         # 显示空的注册表单
         form = UserCreationForm()
     else:

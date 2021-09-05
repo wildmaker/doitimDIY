@@ -1,12 +1,11 @@
 {% extends "todo/base.html" %}
 {% load bootstrap4 %}
 
+
 {% block header %}
     <h2>Log in to your account.</h2>
 {% endblock header %}
-
 {% block content %}
-
     <form class="form" action="{% url 'users:userlogin' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -18,9 +17,8 @@
             <input type="password"  name="password"  class="form-control" placeholder="Enter your password">
         </div>
         {% buttons %}
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button name="submit" class="btn btn-primary">Login</button>
         {% endbuttons %}
-
     </form>
     {% if error_message %}
         <div class="alert alert-danger" role="alert">
@@ -28,3 +26,4 @@
         </div>
     {% endif %}
 {% endblock content %}
+
