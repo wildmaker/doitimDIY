@@ -3,4 +3,4 @@ bin
 include
 python3.7
 .Python
-*\doitim\__pycache__
+doitim/**/__pycache__
