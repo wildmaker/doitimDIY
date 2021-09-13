@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, Http404, JsonResponse
+from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
@@ -38,17 +38,19 @@ def new_item(request):
     if request.method != 'POST':
         # 未提交数据:创建一个新表单
         form = ItemForm()
+        context = {'form':form}
+        return render(request,'todo/new_item.html', context)
     else:
         # 创建新的事务
-        form = ItemForm(request.POST)
-        if form.is_valid():
-            new_item = form.save(commit = False)
-            new_item.owner = request.user
-            new_item.start_date = None
-            new_item.save()
+        form = ItemForm()
+        desc = json.loads(request.body).get('desc')
+        new_item = form.save(commit = False)
+        new_item.owner = request.user
+        new_item.start_date = None
+        new_item.desc = desc
+        new_item.save()
+        return JsonResponse({'foo':'bar'})
         # return HttpResponseRedirect(reverse('todo:items'))
-    context = {'form':form}
-    return render(request,'todo/new_item.html', context)
         # desc = json.loads(request.body).get('desc')
         # Item.objects.create(desc = desc, owner = request.user)
         # form = ItemForm(request.POST)

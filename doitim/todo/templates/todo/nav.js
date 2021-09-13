@@ -2,14 +2,13 @@ $(document).ready(function(){
     
     $("#v-pills-tab").children().each(function(index){
         $(this).click(function(){
-            console.log(index)
-            new_content('items')
+            new_content('items');
         })
     })
 
     function new_content(modelName) {
         var hasForm = $('.form').length;
-        console.log("2",hasForm);
+        console.log("has form: ",Boolean(hasForm));
         if (!hasForm) {
             renderForm(modelName);
         }
@@ -28,16 +27,22 @@ $(document).ready(function(){
                 $('.form').on('submit', function(event){
                     event.preventDefault();
                     console.log('hhhhhhhhhhhh');
-                    var desc = $("#id_desc").val()
+                    var desc = $("#id_desc").val();
                     $.ajaxSetup({data:{csrfmiddlewaretoken:'{% csrf_token %}'}})
                     $.ajax({
                         type: 'POST',
                         // contentType: 'text/html; charset=UTF-8',
                         url: '/new_item/',
                         dataType: 'json',
-                        data: {'desc': desc},
-                        success: function (data) { 
-                            console,log(data);
+                        contentType: 'application/json; charset=UTF-8',
+                        data: JSON.stringify({'desc': desc}),
+                        success: function (re) { 
+                            console.log('data added!');
+                            new_content('items');
+                            // new_content('items');
+                         },
+                         error: function (e) { 
+                            console.log(e);
                          }
                     })
                 })
@@ -47,7 +52,7 @@ $(document).ready(function(){
 
     }
     function renderList(modelName) {
-        console.log('wo run lfasdfsadf');
+        console.log('刷新了列表！');
         var url = '/' + modelName;
         $.ajax({
             type: 'GET',
