@@ -1,10 +1,11 @@
+
 {% for item in items %}
 <tr>
     <th scope="row" style="width: 6.66%">
     <!-- Default unchecked -->
         <div class="custom-control custom-checkbox">
-            <input type="checkbox" class="custom-control-input" id="tableDefaultCheck2" checked>
-            <label class="custom-control-label" for="tableDefaultCheck2"></label>
+            <input type="checkbox" class="custom-control-input" id="checkbox_{{forloop.counter}}" >
+            <label class="custom-control-label" for="checkbox_{{forloop.counter}}"></label>
         </div>
     </th>
     <td>{{ item.start_date.date }}</td>

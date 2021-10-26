@@ -1,3 +1,4 @@
+from typing import Text
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
 from django.urls import reverse
@@ -49,18 +50,8 @@ def new_item(request):
         new_item.start_date = None
         new_item.desc = desc
         new_item.save()
+        messages.add_message(request, messages.INFO, 'hello world!')
         return JsonResponse({'foo':'bar'})
-        # return HttpResponseRedirect(reverse('todo:items'))
-        # desc = json.loads(request.body).get('desc')
-        # Item.objects.create(desc = desc, owner = request.user)
-        # form = ItemForm(request.POST)
-        # if form.is_valid():
-        #     new_item = form.save(commit = False)
-        #     new_item.owner = request.user
-        #     new_item.save()
-        #     messages.add_message(request, messages.INFO, "helloworld")
-            
-        
 
 @login_required
 def today(request):
@@ -79,3 +70,4 @@ def today(request):
         'form': form,
     }
     return render(request, 'todo/today.html', context)
+
