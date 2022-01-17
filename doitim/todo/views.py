@@ -20,7 +20,11 @@ def index(request):
 
 @login_required
 def home(request):
-    return render(request, 'todo/home.html')
+    menu = Menu()
+    context = {
+        'menus':menu.menu
+    }
+    return render(request, 'todo/home.html',context)
 
 @login_required
 def items(request):
@@ -71,3 +75,12 @@ def today(request):
     }
     return render(request, 'todo/today.html', context)
 
+class TodoList():
+    pass
+
+class Test(object):
+    test = 2
+    
+    
+class Menu(object):
+    menu = ('inbox', 'today', 'tomorrow', 'next')
