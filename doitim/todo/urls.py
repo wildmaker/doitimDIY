@@ -5,12 +5,18 @@ urlpatterns = [
     # 主页
     re_path(r'^$', views.index, name = "index"),
 
+    # Inbox
+    re_path(r'^pages/(?P<index>[0-9])', views.pages, name = "pages"),
+
+    # today_v2
+    re_path(r'^today/$', views.today_v2, name = "today_v2"),
+
     # # 显示所有主题
     re_path(r'^home/$', views.home, name = "home"),
     # # 显示所有主题
     re_path(r'^items/$', views.items, name = "items"),
     # # 显示所有主题
-    re_path(r'^today/$', views.today, name = "today"),
+    # re_path(r'^today/$', views.today, name = "today"),
 
     # # 特定主题的详细页面
     # re_path(r'^topics/(?P<topic_id>\d+)/$', views.topic, name = 'topic'),

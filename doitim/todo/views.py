@@ -13,10 +13,54 @@ from datetime import date, datetime
 import pytz
 
 
-
+# 主页
 def index(request):
-    """学习笔记的主页"""
     return render(request, 'todo/index.html')
+
+# 收件箱
+@login_required
+def inbox(request):
+    # get some data
+    data = None
+    menu = ('inbox', 'today', 'tomorrow', 'next')
+    context = {
+        'data' : data,
+        'menus': menu,
+        'now' : menu[0]
+    }
+    return render(request, "todo/inbox.html", context)
+
+# 今日待办
+@login_required
+def today_v2(request):
+    # get some data
+    data = None
+    menu = ('inbox', 'today', 'tomorrow', 'next')
+    context = {
+        'data' : data,
+        'menus': menu,
+        'now' : menu[1]
+    }
+    return render(request, "todo/inbox.html", context)
+
+@login_required
+def pages(request, index):
+    if not index: 
+        index = 0
+        print("not")
+    else:
+        index = int(index)
+    menu = Menu().menu
+    print(menu[index])
+    data = {
+        'title': menu[index]
+    }
+    context = {
+        'data': data,
+        'menu': menu,
+        'index': menu[index]
+    }
+    return render(request, "todo/pages.html", context)
 
 @login_required
 def home(request):

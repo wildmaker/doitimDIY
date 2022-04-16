@@ -16,7 +16,7 @@ def userlogin(request):
         if user is not None:
             login(request, user)
             # redirect
-            return HttpResponseRedirect(reverse("todo:home"))
+            return HttpResponseRedirect(reverse("todo:pages", kwargs = {'index': 0}))
         else:
             # return an error message
             context = {"error_message":"Could not log in, please check your accout."}
