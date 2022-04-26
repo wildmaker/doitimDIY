@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # my apps
     'todo',
     'users',
+    'django_bootstrap_icons'
 ]
 
 MIDDLEWARE = [

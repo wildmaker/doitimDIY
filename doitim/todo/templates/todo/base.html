@@ -1,4 +1,6 @@
 {% load bootstrap4 %}
+{% load bootstrap_icons %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -8,6 +10,7 @@
         <title>Learning Log</title>
         {% bootstrap_css %}
         {% bootstrap_javascript %}
+        {% comment %} <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script> {% endcomment %}
     </head>
     <body>
         {% include 'todo/nav.html' %}

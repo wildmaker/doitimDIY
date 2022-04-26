@@ -44,21 +44,16 @@ def today_v2(request):
     return render(request, "todo/inbox.html", context)
 
 @login_required
-def pages(request, index):
-    if not index: 
-        index = 0
-        print("not")
-    else:
-        index = int(index)
+def pages(request, slug):
+    if not slug: 
+        slug = 'inbox'
     menu = Menu().menu
-    print(menu[index])
-    data = {
-        'title': menu[index]
-    }
+    todos = Todos.todos()
+    print(todos)
     context = {
-        'data': data,
         'menu': menu,
-        'index': menu[index]
+        'slug': slug,
+        'todos':todos,
     }
     return render(request, "todo/pages.html", context)
 
@@ -70,15 +65,15 @@ def home(request):
     }
     return render(request, 'todo/home.html',context)
 
-@login_required
-def items(request):
-    items = Item.objects.order_by('-date_added')
-    form = ItemForm()
-    context = {
-        'items': items,
-        'form': form,
-    }
-    return render(request, 'todo/items.html', context)
+# @login_required
+# def todo(filter = ''):
+#     todo = Item.objects.order_by('-date_added')
+#     form = ItemForm()
+#     context = {
+#         'todo': todo,
+#         'form': form,
+#     }
+#     return todo
 
 @login_required
 @csrf_exempt
@@ -119,8 +114,10 @@ def today(request):
     }
     return render(request, 'todo/today.html', context)
 
-class TodoList():
-    pass
+class Todos():
+    def todos(filter = ''):
+        todos = Item.objects.order_by('-date_added')
+        return todos
 
 class Test(object):
     test = 2
@@ -128,3 +125,21 @@ class Test(object):
     
 class Menu(object):
     menu = ('inbox', 'today', 'tomorrow', 'next')
+    # menu = {
+    #     'inbox':{
+    #         'name':'inbox',
+    #         'icon_url':'http://www.w3.org/2000/svg'
+    #     },
+    #     'today':{
+    #         'name':'today',
+    #         'icon_url':'http://www.w3.org/2000/svg'
+    #     },
+    #     'tomorrow':{
+    #         'name':'tomorrow',
+    #         'icon_url':'http://www.w3.org/2000/svg'
+    #     },
+    #     'next':{
+    #         'name':'next',
+    #         'icon_url':'http://www.w3.org/2000/svg'
+    #     },
+    # }

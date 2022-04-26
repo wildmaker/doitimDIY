@@ -6,7 +6,7 @@ urlpatterns = [
     re_path(r'^$', views.index, name = "index"),
 
     # Inbox
-    re_path(r'^pages/(?P<index>[0-9])', views.pages, name = "pages"),
+    path('pages/<slug:slug>/', views.pages, name = "pages"),
 
     # today_v2
     re_path(r'^today/$', views.today_v2, name = "today_v2"),
@@ -14,7 +14,7 @@ urlpatterns = [
     # # 显示所有主题
     re_path(r'^home/$', views.home, name = "home"),
     # # 显示所有主题
-    re_path(r'^items/$', views.items, name = "items"),
+    # re_path(r'^items/$', views.items, name = "items"),
     # # 显示所有主题
     # re_path(r'^today/$', views.today, name = "today"),
 
