@@ -8,6 +8,9 @@ urlpatterns = [
     # Inbox
     path('pages/<slug:slug>/', views.pages, name = "pages"),
 
+    # item_form
+    path('item_form', views.item_form, name = "item_form"),
+
     # today_v2
     re_path(r'^today/$', views.today_v2, name = "today_v2"),
 

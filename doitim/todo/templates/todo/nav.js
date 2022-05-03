@@ -1,7 +1,7 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
-    $("#v-pills-tab").children().each(function (index) {
-        $(this).click(function () {
+    $("#v-pills-tab").children().each(function(index) {
+        $(this).click(function() {
             new_content('items');
         })
     })
@@ -30,10 +30,10 @@ $(document).ready(function () {
             type: 'GET',
             contentType: 'text/html; charset = UTF-8',
             url: viewURL,
-            success: function (data) {
+            success: function(data) {
                 return data;
             },
-            error: function (e) {
+            error: function(e) {
                 console.log(e);
                 throw new Error("function_getHtml failed.")
             }
@@ -42,7 +42,7 @@ $(document).ready(function () {
 
     function submitForm($form, formURL, successCallback) {
         var data = serializeJson($form)
-        $form.submit(function (event) {
+        $form.submit(function(event) {
             event.preventDefault();
             $.ajaxSetup({ data: { csrfmiddlewaretoken: '{% csrf_token %}' } })
             $.ajax({
@@ -67,10 +67,10 @@ $(document).ready(function () {
             type: 'GET',
             contentType: 'text/html; charset=UTF-8',
             url: url,
-            success: function (result) {
+            success: function(result) {
                 // console.log('result',result)
                 $('.col-9').prepend(result);
-                $('.form').on('submit', function (event) {
+                $('.form').on('submit', function(event) {
                     event.preventDefault();
                     console.log('hhhhhhhhhhhh');
                     var desc = $("#id_desc").val();
@@ -82,12 +82,12 @@ $(document).ready(function () {
                         dataType: 'json',
                         contentType: 'application/json; charset=UTF-8',
                         data: JSON.stringify({ 'desc': desc }),
-                        success: function (re) {
+                        success: function(re) {
                             console.log('data added!');
                             new_content('items');
                             // new_content('items');
                         },
-                        error: function (e) {
+                        error: function(e) {
                             console.log(e);
                         }
                     })
@@ -97,6 +97,7 @@ $(document).ready(function () {
         })
 
     }
+
     function renderList(modelName) {
         console.log('刷新了列表！');
         var url = '/' + modelName;
@@ -104,10 +105,10 @@ $(document).ready(function () {
             type: 'GET',
             contentType: 'text/html; charset=UTF-8',
             url: url,
-            success: function (result) {
+            success: function(result) {
                 $('#table')[0].innerHTML = result;
             },
-            error: function (e) {
+            error: function(e) {
                 console.log(e);
             }
         })

@@ -1,3 +1,4 @@
+from multiprocessing import context
 from typing import Text
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
@@ -49,13 +50,19 @@ def pages(request, slug):
         slug = 'inbox'
     menu = Menu().menu
     todos = Todos.todos()
-    print(todos)
     context = {
         'menu': menu,
         'slug': slug,
         'todos':todos,
+        # 'form':form
     }
     return render(request, "todo/pages.html", context)
+
+@login_required
+def item_form(request):
+    form = ItemForm()
+    return render(request, "todo/item_form.html", {'form': form})
+
 
 @login_required
 def home(request):
@@ -79,6 +86,7 @@ def home(request):
 @csrf_exempt
 def new_item(request):
     """添加新事务"""
+    print(request.body)
     if request.method != 'POST':
         # 未提交数据:创建一个新表单
         form = ItemForm()
@@ -124,22 +132,21 @@ class Test(object):
     
     
 class Menu(object):
-    menu = ('inbox', 'today', 'tomorrow', 'next')
-    # menu = {
-    #     'inbox':{
-    #         'name':'inbox',
-    #         'icon_url':'http://www.w3.org/2000/svg'
-    #     },
-    #     'today':{
-    #         'name':'today',
-    #         'icon_url':'http://www.w3.org/2000/svg'
-    #     },
-    #     'tomorrow':{
-    #         'name':'tomorrow',
-    #         'icon_url':'http://www.w3.org/2000/svg'
-    #     },
-    #     'next':{
-    #         'name':'next',
-    #         'icon_url':'http://www.w3.org/2000/svg'
-    #     },
-    # }
+    menu = {
+        'inbox':{
+            'name':'inbox',
+            'icon':'inbox'
+        },
+        'today':{
+            'name':'today',
+            'icon':'sun'
+        },
+        'tomorrow':{
+            'name':'tomorrow',
+            'icon':'calendar'
+        },
+        'next':{
+            'name':'next',
+            'icon':'hourglass'
+        },
+    }
