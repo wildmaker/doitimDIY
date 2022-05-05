@@ -1,21 +1,22 @@
 {% load bootstrap4 %}
 <div class="pb-2">
-  <div class="card">
-      <div class="card-body">
-          <div class="d-flex flex-row align-items-center">
-              <input type="text"
-                     class="form-control form-control-lg"
-                     id="exampleFormControlInput1"
-                     placeholder="Add new...">
-              <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a>
-              <div>
-                  <button type="button" class="btn btn-primary">Add</button>
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex flex-row align-items-center">
+                <input type="text"
+                       class="form-control form-control-lg"
+                       id="exampleFormControlInput1"
+                       placeholder="Add new...">
+                <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a>
+                <div>
+                    <button type="button" class="btn btn-primary">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% if form %}
+<a class="element" href="/item_form">form 数据为空</a>
+{% comment %} {% if form %}
     <form class="form"s action="{% url 'todo:new_item' %}" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
@@ -25,7 +26,7 @@
 </form>
 {% else %}
 <a class="element" href="/item_form">form 数据为空</a>
-{% endif %}
+{% endif %} {% endcomment %}
 {% comment %} <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">{{ slug }}</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -39,3 +40,9 @@
         </button>
     </div>
 </div>     {% endcomment %}
+
+{% comment %} 
+
+
+
+{% endcomment %}

@@ -61,6 +61,7 @@ def pages(request, slug):
 @login_required
 def item_form(request):
     form = ItemForm()
+    print(form)
     return render(request, "todo/item_form.html", {'form': form})
 
 
