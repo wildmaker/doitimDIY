@@ -1,5 +1,6 @@
 from multiprocessing import context
 from typing import Text
+from urllib import response
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
 from django.urls import reverse
@@ -151,3 +152,7 @@ class Menu(object):
             'icon':'hourglass'
         },
     }
+
+def test(request):
+    # name =  "<a href=’/accounts’>233</a>"
+    return render(request,'todo/test.html')

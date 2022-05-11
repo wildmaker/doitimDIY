@@ -15,7 +15,12 @@
         </div>
     </div>
 </div>
-<a class="element" href="/item_form">form 数据为空</a>
+{% if form %}
+    {% bootstrap_form form %}
+    <div>1234</div>
+{% else %}
+    <a class="component" href="/item_form">form 数据为空</a>
+{% endif %}
 {% comment %} {% if form %}
     <form class="form"s action="{% url 'todo:new_item' %}" method="post">
         {% csrf_token %}
@@ -25,7 +30,6 @@
     {% endbuttons %}
 </form>
 {% else %}
-<a class="element" href="/item_form">form 数据为空</a>
 {% endif %} {% endcomment %}
 {% comment %} <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">{{ slug }}</h1>

@@ -1,8 +1,9 @@
-from django import forms
+from django.forms import ModelForm
 from .models import Item
 
-class ItemForm(forms.ModelForm):
+
+class ItemForm(ModelForm):
     class Meta:
         model = Item
-        fields = ['desc']
+        fields = ['desc', 'start_date']
         labels = {'desc': ''}
