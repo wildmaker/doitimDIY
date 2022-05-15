@@ -1,17 +1,16 @@
 from multiprocessing import context
+import re
 from typing import Text
-from urllib import response
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from .models import Item
 from .forms import ItemForm
-from django.utils.timezone import now, timedelta
-from datetime import date, datetime
+from django.utils import timezone
+from datetime import date, datetime,timedelta
 import pytz
 
 
@@ -55,7 +54,7 @@ def pages(request, slug):
         'menu': menu,
         'slug': slug,
         'todos':todos,
-        # 'form':form
+        'form':ItemForm()
     }
     return render(request, "todo/pages.html", context)
 
@@ -65,7 +64,6 @@ def item_form(request):
     print(form)
     return render(request, "todo/item_form.html", {'form': form})
 
-
 @login_required
 def home(request):
     menu = Menu()
@@ -74,37 +72,35 @@ def home(request):
     }
     return render(request, 'todo/home.html',context)
 
-# @login_required
-# def todo(filter = ''):
-#     todo = Item.objects.order_by('-date_added')
-#     form = ItemForm()
-#     context = {
-#         'todo': todo,
-#         'form': form,
-#     }
-#     return todo
-
 @login_required
-@csrf_exempt
 def new_item(request):
-    """添加新事务"""
-    print(request.body)
-    if request.method != 'POST':
-        # 未提交数据:创建一个新表单
-        form = ItemForm()
-        context = {'form':form}
-        return render(request,'todo/new_item.html', context)
-    else:
-        # 创建新的事务
-        form = ItemForm()
-        desc = json.loads(request.body).get('desc')
-        new_item = form.save(commit = False)
-        new_item.owner = request.user
-        new_item.start_date = None
-        new_item.desc = desc
-        new_item.save()
-        messages.add_message(request, messages.INFO, 'hello world!')
-        return JsonResponse({'foo':'bar'})
+    # 添加新事务
+    if request.method == 'POST':
+
+        # form = ItemForm(request.POST)
+        print(request.POST.get("start_date_0"))
+        datetime_string = request.POST.get("start_date_0") + " " + request.POST.get("start_date_1")
+        start_date = datetime.strptime(datetime_string, "%Y-%m-%d %H:%M:%S")
+        print(request.POST.get("desc"))
+
+        # 这里还有问题，form 实例还不知道怎么创建
+
+        # form = ItemForm()
+        # form.desc = request.POST.get("desc")
+        # form.start_date = start_date
+        # if form.is_valid():
+        #     instance = form.save(commit=False)
+        #     instance.desc = form.cleaned_data['desc']
+        #     instance.start_date = form.cleaned_data['start_date']
+        #     instance.owner_id = request.user.id
+        #     # instance.start_date = date.today()
+        #     print("2333",form.cleaned_data)
+        #     # instance.start_date = form.cleaned_data['start_date']
+        #     print(instance.start_date)
+        #     print("test", timezone.is_naive(instance.start_date),instance.start_date.tzinfo)
+        #     print(timezone.now(), timezone.is_aware(timezone.now()))
+        #     instance.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @login_required
 def today(request):
@@ -129,10 +125,6 @@ class Todos():
         todos = Item.objects.order_by('-date_added')
         return todos
 
-class Test(object):
-    test = 2
-    
-    
 class Menu(object):
     menu = {
         'inbox':{
@@ -152,7 +144,3 @@ class Menu(object):
             'icon':'hourglass'
         },
     }
-
-def test(request):
-    # name =  "<a href=’/accounts’>233</a>"
-    return render(request,'todo/test.html')

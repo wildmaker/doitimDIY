@@ -1,5 +1,6 @@
 {% load bootstrap5 %}
 {% load bootstrap_icons %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,11 +10,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Learning Log</title>
-        {% load static %}
+        {% comment %} Use Django Admin Widgets {% endcomment %}
+        <script src="{% url 'todo:js-catlog' %}"></script>
+        <script src="{% static '/admin/js/core.js' %}"></script>
+        <link rel="stylesheet" href="{% static '/admin/css/base.css' %}"/>
+        <link rel="stylesheet" href="{% static '/admin/css/widgets.css' %}"/>
         <link rel="shortcut icon"
               href="{% static 'images/favicon.ico' %}"
               type="image/x-icon"/>
         <script src="{% static 'js/jquery.min.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/table.css' %}"/>
         {% bootstrap_css %}
         {% bootstrap_javascript %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>

@@ -1,52 +1,30 @@
 {% load bootstrap4 %}
+{{ form.media }}
 <div class="pb-2">
     <div class="card">
         <div class="card-body">
-            <div class="d-flex flex-row align-items-center">
-                <input type="text"
-                       class="form-control form-control-lg"
-                       id="exampleFormControlInput1"
-                       placeholder="Add new...">
-                <a href="#!" data-mdb-toggle="tooltip" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a>
+            <form class="d-flex flex-row align-items-center"
+                  action = "{% url 'todo:new_item' %}"
+                  method="post">
+                {% csrf_token %}
+                {{ form.desc }}
+                {{ form.start_date }}
+                {% comment %} <a class="datepicker-btn"
+                   href="#!"
+                   data-mdb-toggle="tooltip"
+                   title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a> {% endcomment %}
                 <div>
-                    <button type="button" class="btn btn-primary">Add</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
-{% if form %}
-    {% bootstrap_form form %}
-    <div>1234</div>
-{% else %}
-    <a class="component" href="/item_form">form 数据为空</a>
-{% endif %}
-{% comment %} {% if form %}
-    <form class="form"s action="{% url 'todo:new_item' %}" method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        {% buttons %}
-        <button name="submit" class="btn btn-primary">新建待办</button>
-    {% endbuttons %}
-</form>
-{% else %}
-{% endif %} {% endcomment %}
-{% comment %} <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">{{ slug }}</h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group mr-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-          <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          This week
-        </button>
-    </div>
-</div>     {% endcomment %}
-
-{% comment %} 
-
-
-
-{% endcomment %}
+<script>
+    $(document).ready(function() {
+        $('.datepicker').datepicker({});
+        $('.datepicker-btn').click(function() {
+            $('.datepicker').datepicker('show')
+        })
+    })
+</script>
