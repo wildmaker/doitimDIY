@@ -25,7 +25,9 @@ SECRET_KEY = '2xe15*f*tpmc_27uuq7dh8#2q+yit-05zihk79h37*%v#)l*nk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.71.5',
+]
 
 
 # Application definition
@@ -39,8 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 第三方应用程序
     'bootstrap4',
-    'bootstrap5',
+    # 'bootstrap5',
     # my apps
+    'homepage',
     'todo',
     'users',
     'django_bootstrap_icons'
