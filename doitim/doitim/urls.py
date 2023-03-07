@@ -20,5 +20,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include(('users.urls', 'users'), namespace = 'users')),
     path('home/', include(('homepage.urls', 'homepage'), namespace = 'homepage')),
-    path('', include(('todo.urls', 'todo'), namespace = 'todo'))
+    path('', include(('todo.urls', 'todo'), namespace = 'todo')),
+    # scripts 的 URL
+    path('scripts/customer',include('scripts.urls',namespace = 'scripts-customer')),
+    path('scripts/employee',include('scripts.urls',namespace = 'scripts-employee'))
 ]

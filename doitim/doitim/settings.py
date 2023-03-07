@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.71.5',
+    '192.168.71.3',
 ]
 
 
@@ -46,7 +47,8 @@ INSTALLED_APPS = [
     'homepage',
     'todo',
     'users',
-    'django_bootstrap_icons'
+    'django_bootstrap_icons',
+    'scripts',
 ]
 
 MIDDLEWARE = [
