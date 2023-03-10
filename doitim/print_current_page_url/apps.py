@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ScriptsConfig(AppConfig):
+class PrintCurrentPageUrlConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'scripts'
+    name = 'print_current_page_url'

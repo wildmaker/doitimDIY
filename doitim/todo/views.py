@@ -13,10 +13,19 @@ from django.utils import timezone
 from datetime import date, datetime,timedelta
 import pytz
 
-
-# 主页
-def index(request):
-    return render(request, 'todo/index.html')
+@login_required
+def index(request, slug):
+    if not slug: 
+        slug = 'inbox'
+    menu = Menu().menu
+    todos = Todos.todos()
+    context = {
+        'menu': menu,
+        'slug': slug,
+        'todos':todos,
+        'form':ItemForm()
+    }
+    return render(request, "todo/pages.html", context)
 
 # 收件箱
 @login_required
@@ -44,19 +53,6 @@ def today_v2(request):
     }
     return render(request, "todo/inbox.html", context)
 
-@login_required
-def pages(request, slug):
-    if not slug: 
-        slug = 'inbox'
-    menu = Menu().menu
-    todos = Todos.todos()
-    context = {
-        'menu': menu,
-        'slug': slug,
-        'todos':todos,
-        'form':ItemForm()
-    }
-    return render(request, "todo/pages.html", context)
 
 @login_required
 def item_form(request):

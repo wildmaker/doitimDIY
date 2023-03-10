@@ -6,7 +6,7 @@
     <h2>Log in to your account.</h2>
 {% endblock header %}
 {% block content %}
-    <form class="form" action="{% url 'users:userlogin' %}" method="post">
+    <form class="form" action="{% url 'users:login' %}" method="post">
         {% csrf_token %}
         <div class="form-group">
             <label>Username</label>

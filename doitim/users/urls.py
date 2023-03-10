@@ -1,11 +1,16 @@
-from django.urls import path, re_path
+from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+
+app_name = 'users'
 
 urlpatterns = [
-    # 登录
-    re_path(r'^login/$', views.userlogin, name = 'userlogin'),
-    # 注销
-    re_path(r'^logout/$', views.userlogout, name = 'logout'),
     # 注册
-    re_path(r'^register/$', views.register, name = 'register')
+    path('register', views.register, name = 'register'),
+    # 登录
+    path('login', views.userlogin, name = 'login'),
+    # 注销
+    path('logout', views.userlogout, name = 'logout'),
+    # 改密码
+    path('change-password/', auth_views.PasswordChangeView.as_view())
 ]

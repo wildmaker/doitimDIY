@@ -1,27 +1,14 @@
-"""doitim URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('', include('homepage.urls')),
+    path('todo/', include('todo.urls')),
+    path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
-    path('users/', include(('users.urls', 'users'), namespace = 'users')),
-    path('home/', include(('homepage.urls', 'homepage'), namespace = 'homepage')),
-    path('', include(('todo.urls', 'todo'), namespace = 'todo')),
-    # scripts 的 URL
-    path('scripts/customer',include('scripts.urls',namespace = 'scripts-customer')),
-    path('scripts/employee',include('scripts.urls',namespace = 'scripts-employee'))
+    # My test scripts
+    path('test/', include('mytest.urls')),
+    # URL reverse using instance namespace in URL config
+    path('customer/pay/',include('print_current_page_url.urls', namespace = 'print_current_page_url-customer')),
+    path('employee/pay/',include('print_current_page_url.urls', namespace = 'print_current_page_url-employee'))
 ]

@@ -42,13 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 第三方应用程序
     'bootstrap4',
-    # 'bootstrap5',
     # my apps
     'homepage',
     'todo',
     'users',
     'django_bootstrap_icons',
-    'scripts',
+    # 测试脚本
+    'print_current_page_url',
+    'mytest'
 ]
 
 MIDDLEWARE = [

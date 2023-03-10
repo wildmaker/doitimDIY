@@ -1,7 +1,8 @@
 from django.urls import path, re_path
-from django.views.i18n import JavaScriptCatalog
 from . import views
+
+app_name = 'homepage'
 urlpatterns = [
     # 主页
-    re_path(r'^$', views.index, name = "index"),
+    path('', views.index, name = 'index')
 ]

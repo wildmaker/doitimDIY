@@ -2,12 +2,11 @@ from django.urls import path, re_path
 from . import views,my_test
 from django.views.i18n import JavaScriptCatalog
 
-urlpatterns = [
-    # 主页
-    re_path(r'^$', views.index, name = "index"),
+app_name = 'todo'
 
-    # Inbox
-    path('pages/<slug:slug>/', views.pages, name = "pages"),
+urlpatterns = [
+    # today
+    path('<slug:slug>/', views.index, name = 'index'),
 
     # item_form
     path('item_form', views.item_form, name = "item_form"),
