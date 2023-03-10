@@ -11,21 +11,22 @@ from .models import Item
 from .forms import ItemForm
 from django.utils import timezone
 from datetime import date, datetime,timedelta
+from django.urls import reverse
 import pytz
 
 @login_required
-def index(request, slug):
-    if not slug: 
-        slug = 'inbox'
-    menu = Menu().menu
+def index(request, slug='today'):
+    todolists = TodoList().todolists
     todos = Todos.todos()
+    print("hello")
+    print(reverse('todo:js_catlog'))
     context = {
-        'menu': menu,
+        'todolists': todolists,
         'slug': slug,
         'todos':todos,
         'form':ItemForm()
     }
-    return render(request, "todo/pages.html", context)
+    return render(request, "todo/index.html", context)
 
 # 收件箱
 @login_required
@@ -121,22 +122,26 @@ class Todos():
         todos = Item.objects.order_by('-date_added')
         return todos
 
-class Menu(object):
-    menu = {
+class TodoList(object):
+    todolists = {
         'inbox':{
             'name':'inbox',
-            'icon':'inbox'
+            'icon':'inbox',
+            'title':'inbox'
         },
         'today':{
             'name':'today',
-            'icon':'sun'
+            'icon':'sun',
+            'title':'today'
         },
         'tomorrow':{
             'name':'tomorrow',
-            'icon':'calendar'
+            'icon':'calendar',
+            'title':'tomorrow'
         },
         'next':{
             'name':'next',
-            'icon':'hourglass'
+            'icon':'hourglass',
+            'title':'next',
         },
     }

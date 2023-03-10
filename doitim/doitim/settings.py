@@ -28,6 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '192.168.71.5',
     '192.168.71.3',
+    'localhost',
+    '127.0.0.1',
 ]
 
 
@@ -41,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 第三方应用程序
-    'bootstrap4',
+    'django_bootstrap5',
     # my apps
     'homepage',
     'todo',

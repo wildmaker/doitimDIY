@@ -6,11 +6,11 @@ app_name = 'users'
 
 urlpatterns = [
     # 注册
-    path('register', views.register, name = 'register'),
+    path('register/', views.register, name = 'register'),
     # 登录
-    path('login', views.userlogin, name = 'login'),
+    path('login/', views.userlogin, name = 'login'),
     # 注销
-    path('logout', views.userlogout, name = 'logout'),
+    path('logout/', views.userlogout, name = 'logout'),
     # 改密码
     path('change-password/', auth_views.PasswordChangeView.as_view())
 ]

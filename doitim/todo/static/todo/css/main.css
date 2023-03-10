@@ -1,7 +1,8 @@
 /* sidebar */
 #sidebarMenu i {
-    margin-right : 16px;
-  }
+    margin-right: 16px;
+}
+
 /* table */
 #list1 .form-control {
     border-color: transparent;
@@ -22,4 +23,9 @@
 
 #list1 .h1 u {
     text-transform: capitalize;
+}
+
+#list1 {
+    border-radius: .75rem;
+    background-color: #eff1f2!important;
 }

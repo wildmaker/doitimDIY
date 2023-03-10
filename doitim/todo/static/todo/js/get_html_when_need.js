@@ -1,6 +1,5 @@
 $(document).ready(function() {
     $(".component").each(function(index, element) {
-        // element == this
         const URL = $(element).attr("href");
         $(element).attr("style", "display:none;")
         rendertHtml($(element), URL);
@@ -20,6 +19,12 @@ $(document).ready(function() {
             }
         })
     }
+
+    $.each($("#sidebarMenu a"), function (indexInArray, valueOfElement) { 
+        if ($(this).hasClass({{ slug }})) {
+            $(this).addClass("active");
+        }
+    });
 });
 
 // 如果不加载，就生成铆点，否则，就返回组件本身
