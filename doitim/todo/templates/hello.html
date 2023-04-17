@@ -1,0 +1,39 @@
+<div class="card-container">
+    <div class="card">
+      <img src="card1.jpg" alt="Card 1">
+      <p>Card 1 Description</p>
+    </div>
+    <div class="card">
+      <img src="card2.jpg" alt="Card 2">
+      <p>Card 2 Description</p>
+    </div>
+    <div class="card">
+      <img src="card3.jpg" alt="Card 3">
+      <p>Card 3 Description</p>
+    </div>
+    <!-- 其他卡片元素 -->
+  </div>
+
+<style>
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 定义三列等宽的网格 */
+        grid-auto-rows: minmax(100px, auto); /* 定义自动行高 */
+        grid-gap: 20px; /* 定义卡片之间的间隔 */
+      }
+      
+      .card {
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        text-align: center;
+      }
+      
+      .card img {
+        max-width: 100%;
+        height: auto;
+      }
+      
+
+</style>

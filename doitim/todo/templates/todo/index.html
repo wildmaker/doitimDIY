@@ -1,45 +1,44 @@
 {% extends "todo/base.html" %}
 {% block content %}
+  {% url 'todo:all' as url_all %}
+  {% url 'todo:today' as url_today %}
+  {% url 'todo:tomorrow' as url_tomorrow %}
+  {% url 'todo:next_7_days' as url_next_7_days %}
   <div class="container-fluid">
     <div class="row">
-      {% comment %} sidebar {% endcomment %}
       <nav id="sidebarMenu"
            class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
         <div class="sidebar-sticky pt-3">
           <ul class="nav nav-pills flex-column">
-            {% for todolist in todolists %}
-            234333
             <li class="nav-item">
-              <a class="nav-link {% if todolist.name == slug %}active{% endif %}"
-                 href="{% url 'todo:index' todolist.name %}">
-                <i class="fas fa-todolist.icon">
-                </i>
-                <span>今天</span>
+              <a class="nav-link {% if request.path == url_all %}active{% endif %}"
+                 href="{% url 'todo:all' %}">
+                 <i class="fa fa-list-squares"></i>
+                <span>所有</span>
               </a>
             </li>
-            {% endfor %}
             <li class="nav-item">
-              <a class="nav-link {% if "today" == slug %}active{% endif %}"
-                 href="{% url 'todo:index' 'today' %}">
+              <a class="nav-link {% if request.path == url_today %}active{% endif %}"
+                 href="{% url 'todo:today' %}">
                 <i class="fas fa-sun">
                 </i>
                 <span>今天</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if "tomorrow" == slug %}active{% endif %}"
-                 href="{% url 'todo:index' 'tomorrow' %}">
+              <a class="nav-link {% if request.path == url_tomorrow %}active{% endif %}"
+                 href="{% url 'todo:tomorrow' %}">
                 <i class="fas fa-calendar">
                 </i>
                 <span>明天</span>
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if "inbox" == slug %}active{% endif %}"
-                 href="{% url 'todo:index' 'inbox' %}">
-                <i class="fas fa-inbox">
+              <a class="nav-link {% if request.path == url_next_7_days %}active{% endif %}"
+                 href="{% url 'todo:next_7_days' %}">
+                <i class="fa-solid fa-calendar-week"></i>
                 </i>
-                <span>收集箱</span>
+                <span>最近 7 天</span>
               </a>
             </li>
           </ul>
@@ -54,19 +53,17 @@
                   <div class="card-body py-4 px-4 px-md-5">
                     <p class="h1 text-left mt-3 mb-4 pb-3 text-primary">
                       <i class="fas fa-check-square me-1"></i>
-                      <u id="title"></u>
+                      <u id="title">{{ title }}</u>
                     </p>
                     {{ form.media }}
                     <div class="pb-2">
                       <div class="card">
                         <div class="card-body">
                           <form class="d-flex flex-row align-items-center"
-                                action = "{% url 'todo:new_item' %}"
+                                action = "{% url 'todo:new' %}"
                                 method="post">
                             {% csrf_token %}
-                            {{ form.desc }}
-                            {{ form.start_date }}
-                            {% comment %} <a class="datepicker-btn" href="#!" data-mdb-toggle="tooltip" title="Set due date"><i class="fas fa-calendar-alt fa-lg me-3"></i></a> {% endcomment %}
+                            {{ form }}
                             <div>
                               <button type="submit" class="btn btn-primary">Add</button>
                             </div>
@@ -74,14 +71,6 @@
                         </div>
                       </div>
                     </div>
-                    <script>
-                    $(document).ready(function() {
-                        $('.datepicker').datepicker({});
-                        $('.datepicker-btn').click(function() {
-                            $('.datepicker').datepicker('show')
-                        })
-                    })
-                    </script>
                     <hr class="my-4" />
                     <div class="d-flex justify-content-end align-items-center mb-4 pt-2 pb-3">
                       <p class="small mb-0 me-2 text-muted">Filter</p>
@@ -162,5 +151,12 @@
     </div>
     {% load static %}
     <script src="{% static 'todo/js/get_html_when_need.js' %}"></script>
+    <script>
+      $(document).ready(function() {
+          var datepicker = $.fn.datepicker.noConflict(); // return $.fn.datepicker to previously assigned value
+          $.fn.bootstrapDP = datepicker; 
+          $('.datepicker').bootstrapDP();
+      })
+    </script>
   </div>
 {% endblock content %}

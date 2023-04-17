@@ -1,147 +1,160 @@
 from multiprocessing import context
-import re
-from typing import Text
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from .models import Item
-from .forms import ItemForm
+from .forms import TodoForm
 from django.utils import timezone
-from datetime import date, datetime,timedelta
+from datetime import date, datetime, timedelta
 from django.urls import reverse
 import pytz
 
+
+class TodoList:
+    def __init__(self, request: object) -> None:
+        self.tz_name = request.session.get('django_timezone', 'Asia/Shanghai')
+        timezone.activate(pytz.timezone(self.tz_name))
+        self.user_today = timezone.localtime(timezone.now()).date()
+        self.todos = Item.objects.filter(
+            owner_id=request.user.id, is_deleted = False).order_by('-date_added')
+        self.title = "所有"
+
+    def get_todos(self):
+        return self.todos
+
+
+class TodayTodoList(TodoList):
+    def __init__(self, request: object) -> None:
+        super().__init__(request)
+        self.title = "今天"
+
+    def get_todos(self):
+        todos = self.todos.filter(start_date=self.user_today)
+        return todos
+
+
+class TomorrowTodoList(TodoList):
+    def __init__(self, request: object) -> None:
+        super().__init__(request)
+        self.title = "明天"
+
+    def get_todos(self):
+        tomorrow = self.user_today + timedelta(days=1)
+        todos = self.todos.filter(start_date=tomorrow)
+        return todos
+
+
+class Next7DaysTodoList(TodoList):
+    def __init__(self, request: object) -> None:
+        super().__init__(request)
+        self.title = "最近 7 天"
+
+    def get_todos(self):
+        the_7th_day_from_today = self.user_today + timedelta(days=6)
+        todos = self.todos.filter(start_date__date__range=(
+            self.user_today, the_7th_day_from_today))
+        return todos
+
+
+def all(request):
+    todo_list = TodoList(request)
+    context = {
+        'title': todo_list.title,
+        'todos': todo_list.get_todos(),
+        'form': TodoForm()
+    }
+    return render(request, 'todo/index.html', context)
+
+
+@login_required
+def today(request):
+    todo_list = TodayTodoList(request)
+    context = {
+        'title': todo_list.title,
+        'todos': todo_list.get_todos(),
+        'form': TodoForm(),
+    }
+    return render(request, 'todo/index.html', context)
+
+
+@login_required
+def tomorrow(request):
+    todo_list = TomorrowTodoList(request)
+    context = {
+        'title': todo_list.title,
+        'todos': todo_list.get_todos(),
+        'form': TodoForm(),
+    }
+    return render(request, 'todo/index.html', context)
+
+
+@login_required
+def next_7_days(request):
+    todo_list = Next7DaysTodoList(request)
+    context = {
+        'title': todo_list.title,
+        'todos': todo_list.get_todos(),
+        'form': TodoForm(),
+    }
+    return render(request, 'todo/index.html', context)
+
+
+@login_required
+def add_or_update_todo(request):
+    if request.method == 'POST':
+        if request.POST.get('todo_id'):
+            todo = get_object_or_404(Item, pk=request.POST.get(
+                'todo_id'), owner_id=request.user)
+            print(request.POST.get('delete'))
+            if request.POST.get('delete'):
+                todo.is_deleted = True
+                todo.save()
+                return HttpResponse("删除成功：" + todo.desc)
+            form = TodoForm(request.POST, instance=todo)
+            if form.is_valid():
+                form.save()
+            return HttpResponse("修改成功")
+        else:
+            form = TodoForm(request.POST)
+            if form.is_valid():
+                todo = form.save(commit=False)
+                todo.owner = request.user
+                todo.date_added = datetime.now()
+                form.save()
+    else:
+        form = TodoForm()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 @login_required
 def index(request, slug='today'):
-    todolists = TodoList().todolists
+    # 如果 slug
     todos = Todos.todos()
-    print("hello")
-    print(reverse('todo:js_catlog'))
     context = {
-        'todolists': todolists,
         'slug': slug,
-        'todos':todos,
-        'form':ItemForm()
+        'todos': todos,
+        'form': TodoForm()
     }
     return render(request, "todo/index.html", context)
 
-# 收件箱
-@login_required
-def inbox(request):
-    # get some data
-    data = None
-    menu = ('inbox', 'today', 'tomorrow', 'next')
-    context = {
-        'data' : data,
-        'menus': menu,
-        'now' : menu[0]
-    }
-    return render(request, "todo/inbox.html", context)
-
 # 今日待办
+
+
 @login_required
 def today_v2(request):
     # get some data
     data = None
     menu = ('inbox', 'today', 'tomorrow', 'next')
     context = {
-        'data' : data,
+        'data': data,
         'menus': menu,
-        'now' : menu[1]
+        'now': menu[1]
     }
     return render(request, "todo/inbox.html", context)
 
 
-@login_required
-def item_form(request):
-    form = ItemForm()
-    print(form)
-    return render(request, "todo/item_form.html", {'form': form})
-
-@login_required
-def home(request):
-    menu = Menu()
-    context = {
-        'menus':menu.menu
-    }
-    return render(request, 'todo/home.html',context)
-
-@login_required
-def new_item(request):
-    # 添加新事务
-    if request.method == 'POST':
-
-        # form = ItemForm(request.POST)
-        print(request.POST.get("start_date_0"))
-        datetime_string = request.POST.get("start_date_0") + " " + request.POST.get("start_date_1")
-        start_date = datetime.strptime(datetime_string, "%Y-%m-%d %H:%M:%S")
-        print(request.POST.get("desc"))
-
-        # 这里还有问题，form 实例还不知道怎么创建
-
-        # form = ItemForm()
-        # form.desc = request.POST.get("desc")
-        # form.start_date = start_date
-        # if form.is_valid():
-        #     instance = form.save(commit=False)
-        #     instance.desc = form.cleaned_data['desc']
-        #     instance.start_date = form.cleaned_data['start_date']
-        #     instance.owner_id = request.user.id
-        #     # instance.start_date = date.today()
-        #     print("2333",form.cleaned_data)
-        #     # instance.start_date = form.cleaned_data['start_date']
-        #     print(instance.start_date)
-        #     print("test", timezone.is_naive(instance.start_date),instance.start_date.tzinfo)
-        #     print(timezone.now(), timezone.is_aware(timezone.now()))
-        #     instance.save()
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-@login_required
-def today(request):
-    # start = datetime.now().date().astimezone(pytz.utc)
-    start = datetime.combine(datetime.now().date(), datetime.min.time()).astimezone(pytz.utc)
-    end = start + timedelta(days = 1)
-    today = Item.objects.filter(start_date__range = [start, end]).order_by('-date_added')
-    # test = Item.objects.filter(id =2 )[0].start_date
-    # d = date.today()
-    # d2 = datetime.combine(d, datetime.min.time()).astimezone(pytz.utc)
-    # # d3 = now().date().astimezone(pytz.utc)
-    # print(d2<test, start, end)
-    form = ItemForm()
-    context = {
-        'today': today,
-        'form': form,
-    }
-    return render(request, 'todo/today.html', context)
-
 class Todos():
-    def todos(filter = ''):
+    def todos(filter=''):
         todos = Item.objects.order_by('-date_added')
         return todos
-
-class TodoList(object):
-    todolists = {
-        'inbox':{
-            'name':'inbox',
-            'icon':'inbox',
-            'title':'inbox'
-        },
-        'today':{
-            'name':'today',
-            'icon':'sun',
-            'title':'today'
-        },
-        'tomorrow':{
-            'name':'tomorrow',
-            'icon':'calendar',
-            'title':'tomorrow'
-        },
-        'next':{
-            'name':'next',
-            'icon':'hourglass',
-            'title':'next',
-        },
-    }

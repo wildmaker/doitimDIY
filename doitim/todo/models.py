@@ -8,6 +8,7 @@ class Item(models.Model):
     date_added = models.DateTimeField(auto_now_add = True)
     start_date = models.DateTimeField(null = True)
     owner = models.ForeignKey(User, on_delete = models.CASCADE)
+    is_deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.desc

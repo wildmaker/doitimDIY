@@ -4,3 +4,6 @@ from django.http import JsonResponse
 # Create your views here.
 def json_response(request):
     return JsonResponse({"instance":"instance"}, status = 200)
+
+def bootstrap(request):
+    return render(request,'mytest/inbox.html')

@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.admin.widgets import AdminDateWidget
 from django.shortcuts import render
-from .forms import ItemForm
+from .forms import TodoForm
+from .models import Item
 
 # class AdminTimeWidget2(AdminTimeWidget):
 #     class Media:
@@ -24,12 +25,12 @@ class TestForm(forms.Form):
     from_date = forms.DateField(widget=AdminDateWidget)
 
 def test(request):
-    # name =  "<a href=’/accounts’>233</a>"
-    form1 = ItemForm()
-    form2 = TestForm()
-    return render(request,'todo/test.html', {'item_form':form1, 'form2':form2})
+    today_first_dodo = Item.objects.filter(owner_id = request.user).order_by('-date_added').first()
+    form = TodoForm(instance=today_first_dodo)
+    todo_id = today_first_dodo.id
+    return render(request,'todo/test.html', {'form':form,'todo_id':todo_id})
 
 def test2(request):
     # name =  "<a href=’/accounts’>233</a>"
-    form1 = ItemForm()
-    return render(request,'todo/test2.html', {'form1':form1})
+    form1 = TodoForm()
+    return render(request,'todo/test.html', {'form1':form1})
