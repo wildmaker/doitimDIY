@@ -1,0 +1,33 @@
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
+<p>{{ TIME_ZONE }}</p>
+
+<button id='send'>send</button>
+{% csrf_token %}
+
+<script>
+    var btn = document.getElementById("send");
+    var data = {};
+    var url = "{% url "todo:test" %}";
+    var csrf_token = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    btn.addEventListener('click', function() {
+        fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'X-CSRFToken':csrf_token,
+            },
+            body:JSON.stringify(data)
+        }).then(function(response){
+            if(response.ok){
+                return response.json();
+            }
+            throw new Error("响应出错");
+        }).then(function(responseData){
+            console.log("回来的数据",responseData);
+        }).catch(function(error){
+            console.error('Error:', error.message);
+        })
+    })
+</script>

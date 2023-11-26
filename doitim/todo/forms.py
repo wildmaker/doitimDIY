@@ -30,10 +30,3 @@ class TodoForm(ModelForm):
     class Meta:
         model = Item
         fields = ['desc', 'start_date',]
-        labels = {'desc': '', 'start_date': '',}
-        widgets = {
-            'desc': TextInput(attrs={'class': 'form-control form-control-lg', 'id': 'exampleFormControlInput1', 'placeholder': '添加“今天”的任务至“收集箱”'}),
-            'start_date': DateTimeInput(attrs={
-                'class': 'datepicker'
-            }),
-        }

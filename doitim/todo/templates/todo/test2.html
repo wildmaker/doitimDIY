@@ -1,0 +1,11 @@
+<body>
+    <div>
+        <p id="test" contenteditable="true">这是一个文本，你可以编辑试一试</p>
+    </div>
+    <script>
+        document.querySelector('#test').addEventListener('keydown',(e)=> {
+            // return e.which === 13 ? (e.preventDefault(), false):true;
+            console.log(e.target.textContent,typeof(e.target.textContent));
+        })
+    </script>
+</body>

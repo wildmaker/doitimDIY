@@ -41,6 +41,14 @@
                 <span>最近 7 天</span>
               </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link"
+                 href="{% url 'todo:test' %}">
+                <i class="fa-solid fa-calendar-week"></i>
+                </i>
+                <span>测试</span>
+              </a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -59,11 +67,15 @@
                     <div class="pb-2">
                       <div class="card">
                         <div class="card-body">
-                          <form class="d-flex flex-row align-items-center"
-                                action = "{% url 'todo:new' %}"
-                                method="post">
+                          <form class="d-flex flex-row align-items-center todo-form"
+                                method="post"
+                                action="{% url 'todo:new' %}"
+                                >
                             {% csrf_token %}
-                            {{ form }}
+                            <!-- {{ form }} -->
+                            <input type="text" name="desc"/>
+                            <input type="datetime-local" name ="start_date"/>
+                            <input type="hidden" name ='timezone' value="None"/>
                             <div>
                               <button type="submit" class="btn btn-primary">Add</button>
                             </div>
@@ -100,7 +112,7 @@
                       <a href="#!"  data-mdb-toggle="tooltip" title="Ascending"><i class="fas fa-sort-amount-down-alt ms-2"></i></a>
                     </div>
                     {% for todo in todos %}
-                      <ul class="list-group list-group-horizontal rounded-0 bg-transparent border-bottom">
+                      <ul data-todo-id="{{ todo.id }}" class="list-group list-group-horizontal rounded-0 bg-transparent border-bottom">
                         <li class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
                           <div class="form-check">
                             <input class="form-check-input me-0"
@@ -111,7 +123,9 @@
                           </div>
                         </li>
                         <li class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-                          <p class="lead fw-normal mb-0">{{ todo.desc }}</p>
+                          <p class="lead fw-normal mb-0 todo-desc" contenteditable="true" >{{ todo.desc }}</p>
+                          <p class="lead fw-normal mb-0">(id:
+                            <span class="todo-id">{{ todo.id }}</span>)</p>
                         </li>
                         <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
                           <div class="d-flex flex-row justify-content-end mb-1">
@@ -120,7 +134,7 @@
                                data-mdb-toggle="tooltip"
                                title="Edit todo"><i class="fas fa-pencil-alt me-3"></i></a>
                             <a href="#!"
-                               class="text-danger"
+                               class="text-danger delete-todo"
                                data-mdb-toggle="tooltip"
                                title="Delete todo"><i class="fas fa-trash-alt"></i></a>
                           </div>
@@ -156,6 +170,85 @@
           var datepicker = $.fn.datepicker.noConflict(); // return $.fn.datepicker to previously assigned value
           $.fn.bootstrapDP = datepicker; 
           $('.datepicker').bootstrapDP();
+      })
+    </script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded',function(){
+        var timezone_input = document.querySelector('form.todo-form').querySelector('input[name=timezone]');
+        timezone_input.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        var start_date_input = document.querySelector('input[name="start_date"]');
+        const now = new Date();
+        const date_str = now.toLocaleDateString().replaceAll('/', '-');
+        const time_str = now.getHours() + ':' + now.getMinutes();
+        const now_str = date_str + "T" + time_str;
+        start_date_input.value = now_str;
+
+        var deleteBtns = document.querySelectorAll(".delete-todo");
+        var csrf_token = document.querySelector('input[name=csrfmiddlewaretoken]').value;
+
+        deleteBtns.forEach(btn => {
+          btn.addEventListener('click',()=>{
+            var todoId = btn.closest('ul').dataset.todoId;
+            updateTodo(todoId=todoId,undefined,del= true);
+          })
+        });
+
+        function updateTodo(todoId, desc='', del= false ) { 
+          var data = {
+              delete:del,
+              desc:desc,
+              todo_id:todoId,
+            };
+            fetch('{% url "todo:update" %}',{
+              method:'POST',
+              headers:{
+                'Content-Type':'application/json',
+                'X-CSRFToken':csrf_token,
+              },
+              body: JSON.stringify(data)
+            }).then(response=>{
+              if (response.ok) {
+                location.reload();
+              }
+            })
+            .catch(function(error)
+            {console.log(error);});
+        }
+        
+        var todo_desc_elements = document.querySelectorAll('p.todo-desc');
+        todo_desc_elements.forEach(desc_ele => {
+          desc_ele.addEventListener('keydown', e=> {
+            if(e.which === 13) {
+              e.preventDefault();
+              var new_desc = e.target.textContent;
+              var todoId = e.target.closest('ul').dataset.todoId;
+              updateTodo(todoId=todoId,desc = new_desc);
+            }
+            return e.which === 13 ? (e.preventDefault(),false) : true;
+          })
+        })
+
+        // var todoForm = document.querySelector('form.todo-form');
+        // var now = new Date();
+        // var submit_btn = todoForm.querySelector('button');
+        // todoForm.addEventListener('submit', function (event) { 
+        //   event.preventDefault();
+        //   var data = {
+            
+        //   }
+          
+        //   fetch('{% url "todo:new" %}', {
+        //     method:'POST',
+        //     headers:{
+        //       'Content-Type':'application/json',
+        //       'X-CSRFToken':csrf_token,
+        //     },
+        //     body:data
+        //   })
+
+        //  });
+
       })
     </script>
   </div>

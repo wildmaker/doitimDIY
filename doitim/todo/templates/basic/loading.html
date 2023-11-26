@@ -1,0 +1,15 @@
+{% extends "todo/base.html" %}
+{% block content %}
+    <div id="loading" class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <script>
+        function checkCookie(){
+            if(document.cookie.indexOf('timezone=')!=-1){
+                location.reload();
+            }
+        }
+        setInterval(checkCookie,500)
+    </script>
+{% endblock %}
+

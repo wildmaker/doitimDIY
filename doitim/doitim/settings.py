@@ -49,9 +49,6 @@ INSTALLED_APPS = [
     'todo',
     'users',
     'django_bootstrap_icons',
-    # 测试脚本
-    'print_current_page_url',
-    'mytest'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +59,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'doitim.middleware.TimezoneMiddleware',
 ]
+
 
 ROOT_URLCONF = 'doitim.urls'
 
@@ -128,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
